@@ -110,6 +110,23 @@ footer{max-width:1000px;margin:0 auto;padding:20px 16px 26px;color:#7a869d;font-
 @media(min-width:700px){.game-list{grid-template-columns:1fr}.game{grid-template-columns:28px 68px minmax(0,1fr) auto}.game .btn{grid-column:auto;width:auto;margin:0}}
 @media(max-width:390px){.game{grid-template-columns:22px 58px minmax(0,1fr) auto;gap:9px;padding:11px 10px}.game .game-icon{width:54px;height:54px}.game-name{font-size:15px}.game .btn{grid-column:auto;width:auto;margin:0;padding:10px 12px;font-size:11px}}
 
+
+/* Get Access contact chooser modal */
+.access-modal{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(10,24,55,.58);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.access-modal.is-open{display:flex}
+.access-dialog{width:min(100%,560px);background:#fff;border-radius:28px;padding:25px 24px 26px;box-shadow:0 24px 70px #06163855;position:relative;color:#17233f;animation:modalIn .2s ease-out}
+@keyframes modalIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.access-close{position:absolute;right:18px;top:18px;width:42px;height:42px;border:0;border-radius:50%;background:#f0f3f9;color:#65728a;font-size:27px;cursor:pointer}
+.access-game{display:flex;align-items:center;gap:14px;padding-right:45px;margin-bottom:24px}
+.access-game .game-icon{width:64px;height:64px;flex:0 0 64px;margin:0;border-radius:17px}
+.access-game-name{font-size:22px;font-weight:800;margin:0 0 5px}
+.access-subtitle{margin:0;color:#778197;font-size:15px}
+.access-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.access-option{min-height:68px;border:0;border-radius:17px;padding:12px 10px;color:#fff;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}
+.access-option .brand-icon{margin:0;color:inherit}
+.access-option.telegram{background:#229ed9}.access-option.facebook{background:#1877f2}.access-option.whatsapp{background:#20c96b}.access-option.instagram{background:linear-gradient(120deg,#7b38c8,#e44078,#f39b39)}.access-option.email{background:#fff;color:#b88625;border:2px solid #f0e5c8}.access-option.live{grid-column:1/-1;background:#168fe0}
+.access-option:active{transform:scale(.98)}
+@media(max-width:420px){.access-dialog{padding:22px 18px;border-radius:25px}.access-game-name{font-size:19px}.access-option{font-size:15px;min-height:62px}.access-game .game-icon{width:58px;height:58px;flex-basis:58px}}
 </style>
 </head>
 <body>
@@ -177,6 +194,20 @@ footer{max-width:1000px;margin:0 auto;padding:20px 16px 26px;color:#7a869d;font-
     </div>
   </section>
 </main>
+<div class="access-modal" id="accessModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="accessGameName">
+  <div class="access-dialog" role="document">
+    <button class="access-close" type="button" aria-label="Close contact options" onclick="closeAccessModal()">×</button>
+    <div class="access-game"><div id="accessGameLogo"></div><div><h3 class="access-game-name" id="accessGameName">Game</h3><p class="access-subtitle">Available now with instant access</p></div></div>
+    <div class="access-options">
+      <button class="access-option telegram" type="button" onclick="openTawkChat(event)"><span class="brand-icon">➤</span>Telegram</button>
+      <button class="access-option facebook" type="button" onclick="openTawkChat(event)"><span class="brand-icon">f</span>Facebook</button>
+      <button class="access-option whatsapp" type="button" onclick="openTawkChat(event)"><span class="brand-icon">◉</span>WhatsApp</button>
+      <button class="access-option instagram" type="button" onclick="openTawkChat(event)"><span class="brand-icon">◎</span>Instagram</button>
+      <button class="access-option email" type="button" onclick="openTawkChat(event)"><span class="brand-icon">✉</span>Email</button>
+      <button class="access-option live" type="button" onclick="openTawkChat(event)"><span class="brand-icon">💬</span>Live Chat</button>
+    </div>
+  </div>
+</div>
 <footer>© 2026 Heaven Prime Online Gaming. All rights reserved.<br>Game availability and access details should be confirmed with the support team.</footer>
 <nav class="bottom" aria-label="Quick customer support">
   <button type="button" onclick="openTawkChat(event)"><span class="brand-icon whatsapp">◉</span>WhatsApp</button>
@@ -273,9 +304,21 @@ function logoMarkup(name, url, compact=false){
 }
 function render(filter=''){
  const matches = games.filter(([name])=>name.toLowerCase().includes(filter.toLowerCase()));
- list.innerHTML = matches.map(([name,url],i)=>`<article class="game"><div class="num">${games.indexOf(games.find(g=>g[0]===name))+1}</div>${logoMarkup(name,url)}<div><div class="game-name">${name}</div><div class="status">Instant access</div></div><a class="btn" href="#support">Get access</a></article>`).join('');
+ list.innerHTML = matches.map(([name,url],i)=>`<article class="game"><div class="num">${games.indexOf(games.find(g=>g[0]===name))+1}</div>${logoMarkup(name,url)}<div><div class="game-name">${name}</div><div class="status">Instant access</div></div><button class="btn" type="button" onclick="showAccessModal('${name.replace(/'/g, "\\'")}', '${url}')">Get access</button></article>`).join('');
  empty.style.display = matches.length ? 'none' : 'block';
 }
+function showAccessModal(name,url){
+ const modal=document.getElementById('accessModal');
+ document.getElementById('accessGameName').textContent=name;
+ document.getElementById('accessGameLogo').innerHTML=logoMarkup(name,url);
+ modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+}
+function closeAccessModal(){
+ const modal=document.getElementById('accessModal');modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';
+}
+document.getElementById('accessModal').addEventListener('click',e=>{if(e.target.id==='accessModal')closeAccessModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAccessModal()});
+
 const popularItems = games.slice(0,8).map(([name,url])=>`<div class="popular-item">${logoMarkup(name,url,true)}${name}</div>`).join('');
 const popularTrack = document.createElement('div');
 popularTrack.className = 'popular-track';
