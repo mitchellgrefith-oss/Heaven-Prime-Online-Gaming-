@@ -23,7 +23,11 @@ main{max-width:1000px;margin:auto;padding:20px 16px}
 h2{font-size:23px;margin:26px 0 15px;letter-spacing:-.4px}
 .section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .badge{background:#e0e9ff;color:#2858bd;padding:8px 13px;border-radius:30px;font-weight:700;font-size:13px;white-space:nowrap}
-.popular{display:flex;gap:15px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:thin}
+.popular{display:block;overflow:hidden;padding:2px 0 12px;position:relative;mask-image:linear-gradient(to right,transparent,black 3%,black 97%,transparent)}
+.popular-track{display:flex;gap:15px;width:max-content;animation:popularSlide 32s linear infinite;will-change:transform}
+.popular:hover .popular-track,.popular:focus-within .popular-track{animation-play-state:paused}
+@keyframes popularSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.popular-track{animation:none}}
 .popular-item{min-width:105px;text-align:center;font-size:13px;font-weight:700;color:#6b7690}
 .game-icon{width:86px;height:86px;border-radius:22px;margin:0 auto 8px;display:grid;place-items:center;font-size:34px;color:#fff;font-weight:900;background:linear-gradient(145deg,#6c26d9,#f09c35);box-shadow:0 5px 12px #16264a24;border:2px solid #fff}
 .search{width:100%;border:2px solid #c4d2f7;border-radius:20px;background:#fff;padding:17px 18px;font-size:16px;outline:none;margin:9px 0 14px}
@@ -62,7 +66,7 @@ footer{max-width:1000px;margin:0 auto;padding:20px 16px 26px;color:#7a869d;font-
 .live-chat-contact:hover{background:#ffffff30}
 
 .game-icon{width:58px;height:58px;border-radius:15px;margin:0 auto 7px;display:grid;place-items:center;overflow:hidden;background:#fff;box-shadow:0 4px 12px #16264a18;border:1px solid #e5eaf4}
-.game-icon img{width:100%;height:100%;object-fit:contain;padding:4px;display:block}
+.game-icon img{width:100%;height:100%;object-fit:contain;padding:2px;display:block;image-rendering:auto}
 .game .game-icon{width:52px;height:52px;border-radius:13px;margin:0}
 .popular-item .game-icon{width:76px;height:76px;border-radius:19px;margin:0 auto 7px}
 .game-icon.text-logo{background:linear-gradient(145deg,#183e91,#6c35b5);color:#fff;font-size:18px;font-weight:900;letter-spacing:1px}
@@ -226,22 +230,57 @@ if(sliderTrack){
 }
 
 
-const games = [["Orion Stars", "https://logangameroom.com/assets/games/orionstars.png"], ["Milky Way", "https://logangameroom.com/assets/games/milkyway.png"], ["Game Vault", "https://logangameroom.com/assets/games/gamevault.png"], ["Juwa", "https://logangameroom.com/assets/games/juwa.png"], ["Juwa 2.0", "https://logangameroom.com/assets/games/juwa2.png"], ["Ultra Panda", "https://logangameroom.com/assets/games/ultrapanda.jpg"], ["VBlink", "https://logangameroom.com/assets/games/vblink.jpg"], ["Fire Kirin", "https://logangameroom.com/assets/games/firekirin.png"], ["River Sweeps", "https://logangameroom.com/assets/games/riversweeps.png"], ["Game Room", "https://logangameroom.com/assets/games/gameroom.png"], ["Cash Machine", "https://logangameroom.com/assets/games/cashmachine.png"], ["YOLO 777", "https://logangameroom.com/assets/games/yolo777.png"], ["Mega Spin", "https://logangameroom.com/assets/games/megaspin.jpg"], ["Moolah", "https://logangameroom.com/assets/games/moolah.jpg"], ["Ding Dong", "https://logangameroom.com/assets/games/dingding.jpg"], ["E-Game", "https://logangameroom.com/assets/games/egames.jpg"], ["Joker", ""], ["Vegas Roll", ""], ["Winstar", ""], ["Para Casino", ""], ["Loot Casino", ""], ["Casino Ignite", ""]];
+const games = [
+  ["Orion Stars", "https://logangameroom.com/assets/games/orionstars.png"],
+  ["Milky Way", "https://logangameroom.com/assets/games/milkyway.png"],
+  ["Game Vault", "https://logangameroom.com/assets/games/gamevault.png"],
+  ["Juwa", "https://logangameroom.com/assets/games/juwa.png"],
+  ["Solo777", ""],
+  ["Ultra Panda", "https://logangameroom.com/assets/games/ultrapanda.jpg"],
+  ["VBlink", "https://logangameroom.com/assets/games/vblink.jpg"],
+  ["Panda Master", "https://logangameroom.com/assets/games/pandamaster.jpg"],
+  ["Fire Kirin", "https://logangameroom.com/assets/games/firekirin.png"],
+  ["Big Winner", ""],
+  ["Blue Dragon", ""],
+  ["Vegas Sweeps", "https://logangameroom.com/assets/games/vegassweep.png"],
+  ["Cash Frenzy", "https://logangameroom.com/assets/games/cashfrenzy.jpg"],
+  ["High Stake", "https://logangameroom.com/assets/games/highstakes.jpg"],
+  ["VegasX", "https://logangameroom.com/assets/games/vegasx.png"],
+  ["Moolah", "https://logangameroom.com/assets/games/moolah.jpg"],
+  ["River Sweeps", "https://logangameroom.com/assets/games/riversweeps.png"],
+  ["Casino Royale", "https://logangameroom.com/assets/games/casinoroyale.jpg"],
+  ["Game Room", "https://gameroom-777.us/wp-content/uploads/2025/03/logo-768x768.png"],
+  ["Joker", "https://logangameroom.com/assets/games/joker.png"],
+  ["Vegas Roll", "https://logangameroom.com/assets/games/vegasroll.png"],
+  ["Winstar", "https://logangameroom.com/assets/games/winstar.png"],
+  ["Yolo 777", "https://logangameroom.com/assets/games/yolo777.png"],
+  ["Para Casino", "https://logangameroom.com/assets/games/para.jpg"],
+  ["Mega Spin", "https://logangameroom.com/assets/games/megaspin.jpg"],
+  ["Loot Casino", "https://logangameroom.com/assets/games/loot.jpg"],
+  ["Cash Machine", "https://logangameroom.com/assets/games/cashmachine.png"],
+  ["Casino Ignite", "https://logangameroom.com/assets/games/casinoignite.png"],
+  ["E-Games", "https://logangameroom.com/assets/games/egames.jpg"]
+];
 const list = document.getElementById('gameList');
 const search = document.getElementById('search');
 const empty = document.getElementById('empty');
 function logoMarkup(name, url, compact=false){
  const cls = compact ? 'game-icon compact-logo' : 'game-icon';
+ const initials = name.split(/\s+/).map(w=>w[0]).join('').slice(0,3);
  return url
-   ? `<div class="${cls}"><img src="${url}" alt="${name} logo" loading="lazy" referrerpolicy="no-referrer"></div>`
-   : `<div class="${cls} text-logo" aria-label="${name} logo">${name.split(/\\s+/).map(w=>w[0]).join('').slice(0,3)}</div>`;
+   ? `<div class="${cls}"><img src="${url}" alt="${name} logo" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.classList.add('text-logo');this.parentElement.textContent='${initials}'"></div>`
+   : `<div class="${cls} text-logo" aria-label="${name} logo">${initials}</div>`;
 }
 function render(filter=''){
  const matches = games.filter(([name])=>name.toLowerCase().includes(filter.toLowerCase()));
  list.innerHTML = matches.map(([name,url],i)=>`<article class="game"><div class="num">${games.indexOf(games.find(g=>g[0]===name))+1}</div>${logoMarkup(name,url)}<div><div class="game-name">${name}</div><div class="status">Instant access</div></div><a class="btn" href="#support">Get access</a></article>`).join('');
  empty.style.display = matches.length ? 'none' : 'block';
 }
-document.getElementById('popular').innerHTML = games.slice(0,8).map(([name,url])=>`<div class="popular-item">${logoMarkup(name,url,true)}${name}</div>`).join('');
+const popularItems = games.slice(0,8).map(([name,url])=>`<div class="popular-item">${logoMarkup(name,url,true)}${name}</div>`).join('');
+const popularTrack = document.createElement('div');
+popularTrack.className = 'popular-track';
+popularTrack.innerHTML = popularItems + popularItems; // duplicate for seamless looping
+document.getElementById('popular').appendChild(popularTrack);
 search.addEventListener('input',()=>render(search.value));
 render();
 </script>
